@@ -1,0 +1,24 @@
+{
+  "name": "Tradutor Simultâneo Live",
+  "short_name": "Tradutor Live",
+  "description": "Tradução simultânea de qualquer idioma para Português (Brasil) usando Gemini Live.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F2F7",
+  "theme_color": "#5E5CE6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

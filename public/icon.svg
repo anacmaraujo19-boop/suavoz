@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient: Premium Apple-style soft gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F2F2F7" />
+    </linearGradient>
+    
+    <!-- Icon/Mic Gradient: Deep Indigo to Violet -->
+    <linearGradient id="micGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5E5CE6" />
+      <stop offset="100%" stop-color="#BF5AF2" />
+    </linearGradient>
+
+    <!-- Soundwave Glow -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- App Icon Base: Rounded Squirrel/Rectangle -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Shadow under the central element -->
+  <circle cx="256" cy="256" r="140" fill="#000000" opacity="0.04" filter="blur(10px)" />
+
+  <!-- Inner Soft Glass Ring -->
+  <circle cx="256" cy="256" r="120" fill="#FFFFFF" fill-opacity="0.6" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="2" />
+
+  <!-- Microphone Symbol -->
+  <g transform="translate(0, -10)">
+    <!-- Mic Head -->
+    <rect x="226" y="160" width="60" height="110" rx="30" fill="url(#micGrad)" />
+    
+    <!-- Mic Stand/U-shape -->
+    <path d="M 196 210 C 196 280, 316 280, 316 210" fill="none" stroke="url(#micGrad)" stroke-width="12" stroke-linecap="round" />
+    
+    <!-- Mic Base Pole -->
+    <line x1="256" y1="270" x2="256" y2="315" stroke="url(#micGrad)" stroke-width="12" stroke-linecap="round" />
+    
+    <!-- Mic Foot -->
+    <line x1="220" y1="315" x2="292" y2="315" stroke="url(#micGrad)" stroke-width="12" stroke-linecap="round" />
+  </g>
+
+  <!-- Stylized Elegant Sound Waves (Left & Right) -->
+  <path d="M 140 210 Q 110 246, 140 282" fill="none" stroke="#BF5AF2" stroke-width="8" stroke-linecap="round" opacity="0.7" />
+  <path d="M 160 190 Q 120 246, 160 302" fill="none" stroke="#5E5CE6" stroke-width="8" stroke-linecap="round" opacity="0.4" />
+
+  <path d="M 372 210 Q 402 246, 372 282" fill="none" stroke="#BF5AF2" stroke-width="8" stroke-linecap="round" opacity="0.7" />
+  <path d="M 352 190 Q 392 246, 352 302" fill="none" stroke="#5E5CE6" stroke-width="8" stroke-linecap="round" opacity="0.4" />
+</svg>

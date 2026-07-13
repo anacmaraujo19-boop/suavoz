@@ -108,6 +108,29 @@ export function useTranslator() {
       utterance.voice = selectedVoice;
     }
 
+    let safetyTimeout: any = null;
+
+    const clearSafetyTimeout = () => {
+      if (safetyTimeout) {
+        clearTimeout(safetyTimeout);
+        safetyTimeout = null;
+      }
+    };
+
+    const handleSpeechEnd = () => {
+      clearSafetyTimeout();
+      if (isSpeakingRef.current) {
+        isSpeakingRef.current = false;
+        setIsSpeaking(false);
+        // Resume listening if session is active
+        setTimeout(() => {
+          if (isActiveRef.current && !isProcessingRef.current) {
+            startRecognitionEngine();
+          }
+        }, 300);
+      }
+    };
+
     utterance.onstart = () => {
       isSpeakingRef.current = true;
       setIsSpeaking(true);
@@ -115,23 +138,22 @@ export function useTranslator() {
       if (recognitionRef.current && isListening) {
         recognitionRef.current.abort();
       }
+
+      // Safety timeout: recover in case mobile browser never fires onend/onerror
+      const estimatedMs = Math.max(3000, (text.length / 12) * 1000 + 4000);
+      safetyTimeout = setTimeout(() => {
+        console.warn("Safety recovery: Forcing speech end.");
+        handleSpeechEnd();
+      }, estimatedMs);
     };
 
     utterance.onend = () => {
-      isSpeakingRef.current = false;
-      setIsSpeaking(false);
-      // Resume listening if session is active
-      if (isActiveRef.current && !isProcessingRef.current) {
-        startRecognitionEngine();
-      }
+      handleSpeechEnd();
     };
 
-    utterance.onerror = () => {
-      isSpeakingRef.current = false;
-      setIsSpeaking(false);
-      if (isActiveRef.current && !isProcessingRef.current) {
-        startRecognitionEngine();
-      }
+    utterance.onerror = (e) => {
+      console.warn("SpeechSynthesis error:", e);
+      handleSpeechEnd();
     };
 
     window.speechSynthesis.speak(utterance);
@@ -239,7 +261,7 @@ export function useTranslator() {
           if (isActiveRef.current && !isSpeakingRef.current && !isProcessingRef.current) {
             startRecognitionEngine();
           }
-        }, 100);
+        }, 300); // 300ms is much safer for mobile audio context release!
       };
 
       recognition.start();
@@ -254,6 +276,20 @@ export function useTranslator() {
       alert("O seu navegador não suporta a API de Reconhecimento de Voz. Experimente usar o Google Chrome ou Safari.");
       return;
     }
+
+    // iOS/Android Chrome SpeechSynthesis Pre-Unlock with a user gesture
+    if (window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel();
+        const silentUtterance = new SpeechSynthesisUtterance(" ");
+        silentUtterance.lang = "pt-BR";
+        silentUtterance.volume = 0;
+        window.speechSynthesis.speak(silentUtterance);
+      } catch (e) {
+        console.warn("Falha ao desbloquear síntese de voz:", e);
+      }
+    }
+
     isActiveRef.current = true;
     startRecognitionEngine();
   }, [startRecognitionEngine]);
